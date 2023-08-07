@@ -5,9 +5,20 @@ const dotenv = require("dotenv").config();
 const app = express();
 
 app.use(bodyParser.json());
-const upload = multer({dest :"./public/data/uploads"})
 
-const db_connect = require("./config/db"); 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/uploads/')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix + '-'+ file.originalname)
+  }
+}) 
+
+const upload = multer({ storage: storage })
+
+const db_connect = require("./config/db");  
 
 //! MongoDb connection
 db_connect();
@@ -18,7 +29,7 @@ app.get("/", (req, res) => {
 });
 
 // Multer(File upload)
-app.post("/uploads",(req,res)=>{
+app.post("/uploads",upload.single("file"),(req,res)=>{
   res.json({ message: "Upload completed" });
 })
 
