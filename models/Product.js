@@ -18,10 +18,6 @@ const productSchema = new mongoose.Schema({
     expiresAt:{
         type:Date,
     },
-    status: {
-      type: String,
-      enum:["admin","customer"],
-    },
     userId: {
       type:  mongoose.Schema.Types.ObjectId,
       ref: "Visitors"
