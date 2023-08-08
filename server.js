@@ -30,12 +30,13 @@ app.get("/", (req, res) => {
 
 // Multer(File upload)
 app.post("/uploads",upload.single("file"),(req,res)=>{
-  res.json({ message: "Upload completed" });
+  res.json(req.file);
 })
 
 //! Routes
 app.use("/api/visitors", require("./routes/api/route"));
 app.use("/api/tasks", require("./routes/api/tasks"));
+app.use("/api/products", require("./routes/api/products"));
 
 const port = process.env.PORT;
 app.listen(port, () => {
