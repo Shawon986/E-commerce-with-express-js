@@ -1,10 +1,27 @@
 const express = require("express");
+const multer = require("multer")
 const authAccessToken = require("../../middleware/auth");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 // const Task = require("../../models/task");
 const Product = require("../../models/Product");
 const File = require("../../models/File");
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, '../../public/uploads')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + require("crypto").randomBytes(64).toString("hex")+ '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '-' + uniqueSuffix + '-'+ file.originalname)
+    }
+  }) 
+  
+  const upload = multer({ storage: storage })
+
+  router.post("/uploads",upload.single("file"),(req,res)=>{
+    res.json(req.file);
+  })
 
 router.post(
   "/",
