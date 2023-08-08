@@ -2,12 +2,13 @@ const express = require("express");
 const authAccessToken = require("../../middleware/auth");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
-
-const Task = require("../../models/task");
+// const Task = require("../../models/task");
+const Product = require("../../models/Product");
+const File = require("../../models/File");
 
 router.post(
-  "/newTask",
-  [body("title", "Please input the title").notEmpty()],
+  "/",
+  [body("name", "Please input the name").notEmpty()],
   [authAccessToken],
   async (req, res) => {
     try {
@@ -17,14 +18,17 @@ router.post(
         return res.status(400).json({ errors: error });
       }
       const id = req.payload.id;
-      const taskObject = {
-        title: req.body.title,
+      const productObj = {
+        name: req.body.name,
         desc: req.body.desc ?? "",
+        price: req.body.price ?? 0,
+        madeIn: req.body.madeIn ?? "",
+        expiresAt: new Date(),
         userId: id,
       };
-      const task = new Task(taskObject);
-      res.status(201).json(task);
-      await task.save();
+      const product = new Product(productObj);
+      res.status(201).json(product);
+      await product.save();
     } catch (error) {
       console.error(error);
       res
