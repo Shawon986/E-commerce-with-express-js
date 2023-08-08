@@ -13,9 +13,10 @@ router.post("/",[
   body("email","Please input your valid email address").isEmail(),
   body("email","Email cannot be empty").notEmpty(),
   body("password","password cannot be empty").notEmpty(),
-  body("password","password must be 8-14 charecter").isLength({min:8,max:14})
+  body("password","password must be 8-14 charecter").isLength({min:8,max:14}),
+  body("type","Type must be either admin or customer").notEmpty().isIn(["admin","customer"])
 ], async (req, res) => {
-    try {
+    try { 
       
       const errors = validationResult(req)
       let error = errors.array().map((error)=>error.msg)
@@ -29,6 +30,7 @@ router.post("/",[
         name: req.body.name,
         email: req.body.email,
         password: password,
+        type:req.body.type,
       };
       const visitor = new Visitors(visitorObject);
       res.status(201).json(visitor);
@@ -107,7 +109,7 @@ router.put("/:id", async (req, res) => {
   //Login a visitor
 
 router.post("/login",[
-  body("type","Type must be either Email or Refresh").isIn(["email","refresh"])
+  body("type","Type must be either Email or Refresh").notEmpty().isIn(["email","refresh"])
 ], async (req, res) => {
     try {
       const errors = validationResult(req)
@@ -198,7 +200,7 @@ router.post("/login",[
   
   function getVisitorToken(visitor, res) {
     const accessToken = jwt.sign(
-      { email: visitor.email, id: visitor._id },
+      { email: visitor.email, id: visitor._id,type:visitor.type },
       process.env.JWT_SECRET
     );
     const refreshToken = jwt.sign(
