@@ -12,6 +12,11 @@ const VisitorSchema = new mongoose.Schema({
     password: {
       type: String,
     },
+    type: {
+      type: String,
+      enum:["admin","customer"],
+      default:"customer"
+    },
   },{timestamps:true});
   
   //! Model
