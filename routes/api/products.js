@@ -34,6 +34,9 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: error });
       }
+      if(req?.payload?.type !="admin"){
+        return res.status(400).json({message:"You are not an admin"})
+      }
       const id = req.payload.id;
       const productObj = {
         name: req.body.name,
