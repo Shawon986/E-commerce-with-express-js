@@ -1,5 +1,5 @@
 const express = require("express");
-const multer = require("multer")
+const multer = require("multer");
 const authAccessToken = require("../../middleware/auth");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
@@ -8,20 +8,31 @@ const Product = require("../../models/Product");
 const File = require("../../models/File");
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, '../../public/uploads')
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + require("crypto").randomBytes(64).toString("hex")+ '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix + '-'+ file.originalname)
-    }
-  }) 
-  
-  const upload = multer({ storage: storage })
+  destination: function (req, file, cb) {
+    cb(null, "../../public/uploads");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix =
+      Date.now() +
+      require("crypto").randomBytes(64).toString("hex") +
+      "-" +
+      Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + "-" + file.originalname);
+  },
+});
 
-  router.post("/uploads",upload.single("file"),(req,res)=>{
-    res.json(req.file);
-  })
+const upload = multer({ storage: storage });
+
+router.post("/uploads", upload.single("file"), async (req, res) => {
+  const fileObj = {
+    name: req.file.filename,
+    path: req.file.path,
+  };
+  const file = new File(fileObj);
+  res.status(201).json(file);
+  await file.save();
+  
+});
 
 router.post(
   "/",
@@ -34,8 +45,8 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: error });
       }
-      if(req?.payload?.type !="admin"){
-        return res.status(400).json({message:"You are not an admin"})
+      if (req?.payload?.type != "admin") {
+        return res.status(400).json({ message: "You are not an admin" });
       }
       const id = req.payload.id;
       const productObj = {
