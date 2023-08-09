@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
   }) 
   
   const upload = multer({ storage: storage })
-  
+
   router.post("/uploads",upload.single("file"),async(req,res)=>{
     const fileObj ={
         name:req.file.filename,
@@ -49,6 +49,7 @@ router.post(
         price: req.body.price ?? 0,
         madeIn: req.body.madeIn ?? "",
         expiresAt: new Date(),
+        fileId:req.body.fileId ??,
         userId: id,
       };
       const product = new Product(productObj);
