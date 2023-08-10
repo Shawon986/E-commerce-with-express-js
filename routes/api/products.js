@@ -49,7 +49,7 @@ router.post(
         price: req.body.price ?? 0,
         madeIn: req.body.madeIn ?? "",
         expiresAt: new Date(),
-        fileId:req.body.fileId ??,
+        fileId:req.body.fileId ??"",
         userId: id,
       };
       const product = new Product(productObj);
