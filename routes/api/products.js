@@ -53,8 +53,12 @@ router.post(
         userId: id,
       };
       const product = new Product(productObj);
-      res.status(201).json(product);
       await product.save();
+      if(product?.fileId){
+        const createdProduct = await Product.findById(product._id).populate("fileId").exec()
+        res.status(201).json(createdProduct);
+
+      }
     } catch (error) {
       console.error(error);
       res
