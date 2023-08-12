@@ -14,7 +14,7 @@ db_connect();
 
 //! Connection Check
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Task Manager app" });
+  res.json({ message: "Welcome to E-commerce app" });
 });
 
 
