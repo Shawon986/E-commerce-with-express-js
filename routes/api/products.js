@@ -111,7 +111,7 @@ router.put("/edit/:id", authAccessToken, async (req, res) => {
     }
     const id = req.params.id;
     const userId = req.payload.id;
-    const product = await Product.findOneAndUpdate(
+    const product = await Product.findByIdAndUpdate(
       { _id: id },
       req.body,
       {
@@ -144,16 +144,19 @@ router.get("/oneProduct/:id", authAccessToken, async (req, res) => {
       .json({ message: "Something went wrong with the server !!!" });
   }
 });
-//! Delete a task by visitor
-router.delete("/delete/:id", authAccessToken, async (req, res) => {
+//! Delete a task by admin
+router.delete("/deleteOne/:id", authAccessToken, async (req, res) => {
   try {
+    if(req?.payload?.type !="admin"){
+      return res.status(400).json({message:"You are not an admin"})
+    }
     const id = req.params.id;
     const userId = req.payload.id;
-    const task = await Task.findOneAndDelete({ _id: id, userId: userId });
-    if (!task) {
-      res.status(404).json({ message: "task not found" });
+    const product = await Product.findByIdAndDelete({ _id: id});
+    if (!product) {
+      res.status(404).json({ message: "product not found" });
     } else {
-      res.json(task);
+      res.json(product);
     }
   } catch (error) {}
 });
