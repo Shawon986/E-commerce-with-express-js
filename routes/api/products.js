@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
         name:req.file.filename,
         path:req.file.path
     }
-    const file = new File(fileObj)
+    const file = new File(fileObj) 
     await file.save()
     res.status(201).json(file)
     
@@ -35,7 +35,7 @@ router.post(
   async (req, res) => {
     try {
       const errors = validationResult(req);
-      let error = errors.array().map((error) => error.msg);
+      let error = errors.array().map((error) => error.msg); 
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: error });
       }
@@ -67,7 +67,7 @@ router.post(
     }
   }
 );
-//! Get all tasks by visitors
+//! Get all Products by visitors
 router.get("/getProducts", authAccessToken, async (req, res) => {
   try {
     const id = req.payload.id;
@@ -83,6 +83,7 @@ router.get("/getProducts", authAccessToken, async (req, res) => {
 //! Update a status by visitor
 router.put("/status/:id", authAccessToken, async (req, res) => {
   try {
+    
     const id = req.params.id;
     const userId = req.payload.id;
     const status = req.body.status;
@@ -101,23 +102,26 @@ router.put("/status/:id", authAccessToken, async (req, res) => {
     }
   } catch (error) {}
 });
-//! Update a task by visitor
-router.put("/update/:id", authAccessToken, async (req, res) => {
+//! Update a Product by visitor
+router.put("/edit/:id", authAccessToken, async (req, res) => {
   try {
+    if(req?.payload?.type !="admin"){
+      return res.status(400).json({message:"You are not an admin"})
+    }
     const id = req.params.id;
     const userId = req.payload.id;
-    const task = await Task.findOneAndUpdate(
+    const product = await Product.findOneAndUpdate(
       { _id: id, userId: userId },
       req.body,
       {
         new: true,
       }
     );
-    if (!task) {
-      res.status(404).json({ message: "task not found" });
+    if (!product) {
+      res.status(404).json({ message: "product not found" });
     } else {
-      res.json(task);
-      await task.save();
+      res.json(product);
+      await product.save();
     }
   } catch (error) {}
 });
