@@ -71,8 +71,8 @@ router.post(
 //! Get all Products by visitors
 router.get("/getProducts", authAccessToken, async (req, res) => {
   try {
-    const id = req.payload.id;
-    const products = await Product.find({ userId: id });
+    
+    const products = await Product.find({});
     res.json(products);
   } catch (error) {
     console.error(error);
