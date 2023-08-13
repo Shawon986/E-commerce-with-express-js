@@ -144,7 +144,7 @@ router.get("/oneProduct/:id", authAccessToken, async (req, res) => {
       .json({ message: "Something went wrong with the server !!!" });
   }
 });
-//! Delete a task by admin
+//! Delete a product by admin
 router.delete("/deleteOne/:id", authAccessToken, async (req, res) => {
   try {
     if(req?.payload?.type !="admin"){
