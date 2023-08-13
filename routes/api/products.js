@@ -68,11 +68,11 @@ router.post(
   }
 );
 //! Get all tasks by visitors
-router.get("/get", authAccessToken, async (req, res) => {
+router.get("/getProducts", authAccessToken, async (req, res) => {
   try {
     const id = req.payload.id;
-    const task = await Task.find({ userId: id });
-    res.json(task);
+    const products = await Product.find({ userId: id });
+    res.json(products);
   } catch (error) {
     console.error(error);
     res

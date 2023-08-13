@@ -7,7 +7,7 @@ module.exports= function (req, res, next) {
     res.status(500).json({message:"AuthHeader is not found"});
     return
   }
-  const accessToken = authHeader && authHeader.split(" ")[1];
+  const accessToken = authHeader && authHeader.split(" ")[1]; 
   if (!accessToken) {
     res.status(401).json({ message: "Visitor unauthorized" });
     return
