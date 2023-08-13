@@ -3,9 +3,10 @@ const multer = require("multer")
 const authAccessToken = require("../../middleware/auth");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
-// const Task = require("../../models/task");
 const Product = require("../../models/Product");
 const File = require("../../models/File");
+
+//! File upload 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './public/uploads')
