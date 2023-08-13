@@ -125,16 +125,16 @@ router.put("/edit/:id", authAccessToken, async (req, res) => {
     }
   } catch (error) {}
 });
-//! Get a task by visitor
-router.get("/getone/:id", authAccessToken, async (req, res) => {
+//! Get a product by visitor
+router.get("/oneProduct/:id", authAccessToken, async (req, res) => {
   try {
     const id = req.params.id;
     const userId = req.payload.id;
-    const task = await Task.findOne({ _id: id, userId: userId });
-    if (!task) {
-      res.status(404).json({ message: "task not found" });
+    const product = await Product.findOne({ _id: id, userId: userId });
+    if (!product) {
+      res.status(404).json({ message: "product not found" });
     } else {
-      res.json(task);
+      res.json(product);
     }
   } catch (error) {
     console.error(error);
