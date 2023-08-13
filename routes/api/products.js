@@ -28,6 +28,7 @@ const storage = multer.diskStorage({
     res.status(201).json(file)
     
   })
+  // Create a product by admin
 router.post(
   "/",
   [body("name", "Please input the name").notEmpty()],
@@ -102,7 +103,7 @@ router.put("/status/:id", authAccessToken, async (req, res) => {
     }
   } catch (error) {}
 });
-//! Update a Product by visitor
+//! Update a Product by admin
 router.put("/edit/:id", authAccessToken, async (req, res) => {
   try {
     if(req?.payload?.type !="admin"){
@@ -111,7 +112,7 @@ router.put("/edit/:id", authAccessToken, async (req, res) => {
     const id = req.params.id;
     const userId = req.payload.id;
     const product = await Product.findOneAndUpdate(
-      { _id: id, userId: userId },
+      { _id: id },
       req.body,
       {
         new: true,
